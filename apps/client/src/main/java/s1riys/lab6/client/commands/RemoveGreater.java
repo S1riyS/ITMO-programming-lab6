@@ -2,6 +2,7 @@ package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
 
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.client.forms.ProductForm;
 import s1riys.lab6.client.network.UDPClient;
@@ -31,9 +32,7 @@ public class RemoveGreater extends ServersideCommand {
 
             RemoveGreaterRequest request = new RemoveGreaterRequest(product);
             RemoveGreaterResponse response = (RemoveGreaterResponse) client.sendAndReceiveCommand(request);
-            if (response.getError() != null && !response.getError().isEmpty()) {
-                throw new APIException(response.getError());
-            }
+            ValidationHelper.validateResponse(response);
 
             if (response.count == 0) {
                 console.println("Продукты для удаления не найдены");

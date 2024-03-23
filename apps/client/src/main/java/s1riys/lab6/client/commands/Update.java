@@ -1,6 +1,8 @@
 package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
+
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.client.forms.ProductForm;
 import s1riys.lab6.client.network.UDPClient;
@@ -27,14 +29,12 @@ public class Update extends ServersideCommand {
     @Override
     public Boolean execute(String[] data) {
         try {
-            if (data.length != 1) throw new WrongAmountOfElementsException();
+            ValidationHelper.validateArgsLength(data, 1);
             long id = Long.parseLong(data[0]);
 
             Product product = new ProductForm(console).build();
             UpdateResponse response = (UpdateResponse) client.sendAndReceiveCommand(new UpdateRequest(id, product));
-            if (response.getError() != null && !response.getError().isEmpty()) {
-                throw new APIException(response.getError());
-            }
+            ValidationHelper.validateResponse(response);
 
             console.println("Продукт успешно обновлен.");
             return true;

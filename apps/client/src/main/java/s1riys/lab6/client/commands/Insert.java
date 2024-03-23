@@ -1,6 +1,8 @@
 package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
+
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.client.forms.ProductForm;
 import s1riys.lab6.client.network.UDPClient;
@@ -29,9 +31,7 @@ public class Insert extends ServersideCommand {
             Product product = new ProductForm(console).build();
 
             AddResponse response = (AddResponse) client.sendAndReceiveCommand(new AddRequest(product));
-            if (response.getError() != null && !response.getError().isEmpty()) {
-                throw new APIException(response.getError());
-            }
+            ValidationHelper.validateResponse(response);
 
             console.println("Новый продукт с id=%s успешно добавлен!".formatted(response.newId));
             return true;

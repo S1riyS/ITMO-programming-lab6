@@ -1,6 +1,8 @@
 package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
+
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.client.network.UDPClient;
 import s1riys.lab6.common.constants.Commands;
@@ -25,10 +27,7 @@ public class Show extends ServersideCommand {
     public Boolean execute(String[] data) {
         try {
             ShowResponse response = (ShowResponse) client.sendAndReceiveCommand(new ShowRequest());
-
-            if (response.getError() != null && !response.getError().isEmpty()) {
-                throw new APIException(response.getError());
-            }
+            ValidationHelper.validateResponse(response);
 
             if (response.products.isEmpty()) {
                 console.println("Коллекция пуста");

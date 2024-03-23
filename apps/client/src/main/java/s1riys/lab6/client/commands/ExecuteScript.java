@@ -1,6 +1,8 @@
 package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
+
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.common.constants.Commands;
 import s1riys.lab6.common.exceptions.WrongAmountOfElementsException;
@@ -17,7 +19,7 @@ public class ExecuteScript extends Command {
     @Override
     public Boolean execute(String[] data) {
         try {
-            if (data.length != 1) throw new WrongAmountOfElementsException();
+            ValidationHelper.validateArgsLength(data, 1);
             return true;
 
         } catch (WrongAmountOfElementsException e) {

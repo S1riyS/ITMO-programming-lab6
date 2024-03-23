@@ -1,6 +1,8 @@
 package s1riys.lab6.client.commands;
 
 import static s1riys.lab6.client.commands.utils.SignatureHelper.defineSignature;
+
+import s1riys.lab6.client.commands.utils.ValidationHelper;
 import s1riys.lab6.client.console.IConsole;
 import s1riys.lab6.client.network.UDPClient;
 import s1riys.lab6.common.constants.Commands;
@@ -19,9 +21,7 @@ public class Save extends ServersideCommand {
     public Boolean execute(String[] data) {
         try {
             SaveResponse response = (SaveResponse) client.sendAndReceiveCommand(new SaveRequest());
-            if (response.getError() != null && !response.getError().isEmpty()) {
-                throw new APIException(response.getError());
-            }
+            ValidationHelper.validateResponse(response);
 
             console.println("Коллекция сохранена в файл");
             return true;
