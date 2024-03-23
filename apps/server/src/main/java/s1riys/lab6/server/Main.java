@@ -48,8 +48,10 @@ public class Main {
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 
+        Runtime.getRuntime().addShutdownHook(new Thread(collectionManager::writeToCSV));
+
         try {
-            UDPServer server = new UDPServer(InetAddress.getLocalHost(), PORT, commandHandler);
+            UDPServer server = new UDPServer(InetAddress.getLocalHost(), PORT, commandHandler, collectionManager::writeToCSV);
             server.run();
         } catch (SocketException e) {
             System.out.println("Ошибка сокета");

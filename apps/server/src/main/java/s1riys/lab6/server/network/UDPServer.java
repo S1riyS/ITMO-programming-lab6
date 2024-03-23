@@ -26,13 +26,15 @@ public class UDPServer extends UDPShared {
     private final DatagramSocket datagramSocket;
     private final CommandHandler commandHandler;
     private boolean running = true;
+    private Runnable afterExecutionHook;
     private final Logger logger = Main.logger;
 
-    public UDPServer(InetAddress address, int port, CommandHandler commandHandler) throws SocketException {
+    public UDPServer(InetAddress address, int port, CommandHandler commandHandler, Runnable afterExecutionHook) throws SocketException {
         super(address, port);
         this.datagramSocket = new DatagramSocket(getAddr());
         this.datagramSocket.setReuseAddress(true);
         this.commandHandler = commandHandler;
+        this.afterExecutionHook = afterExecutionHook;
     }
 
     public Pair<Byte[], SocketAddress> receiveData() throws IOException {
@@ -126,6 +128,7 @@ public class UDPServer extends UDPShared {
             Response response = null;
             try {
                 response = commandHandler.handle(request);
+                if (afterExecutionHook != null) afterExecutionHook.run();
             } catch (Exception e) {
                 logger.error("Ошибка выполнения команды: {}", e.toString(), e);
             }
