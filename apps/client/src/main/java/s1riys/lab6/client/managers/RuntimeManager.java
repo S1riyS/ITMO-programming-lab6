@@ -45,6 +45,7 @@ public class RuntimeManager {
             register(Commands.REMOVE_LOWER, new RemoveLower(console, client));
             register(Commands.REMOVE_GREATER_KEY, new RemoveGreaterKey(console, client));
             register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(console, client));
+            register(Commands.FILTER_BY_MANUFACTURER, new FilterByManufacturer(console, client));
         }};
     }
 

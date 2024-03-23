@@ -38,6 +38,7 @@ public class Main {
             register(Commands.REMOVE_LOWER, new RemoveLower(collectionManager));
             register(Commands.REMOVE_GREATER_KEY, new RemoveGreaterKey(collectionManager));
             register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(collectionManager));
+            register(Commands.FILTER_BY_MANUFACTURER, new FilterByManufacturer(collectionManager));
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 
