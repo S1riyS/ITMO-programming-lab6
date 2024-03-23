@@ -118,9 +118,6 @@ public class CollectionManager {
      * @param product The product to add.
      */
     public long add(Product product) {
-        System.out.println("GO GO GO");
-        System.out.println(product);
-
         long nextProductId = (long) getDefaultCollection().values().stream()
                 .filter(Objects::nonNull)
                 .map(Product::getId)
@@ -135,17 +132,11 @@ public class CollectionManager {
                 .mapToInt(Long::intValue)
                 .max().orElse(0) + 1;
 
-        System.out.println(getDefaultCollection());
-        System.out.println(nextProductId);
-        System.out.println(nextOrgId);
-
         if (product.getManufacturer() != null) {
             product.getManufacturer().setId(nextOrgId);
         }
 
-        System.out.println(product);
         Product processedProduct = product.copy(nextProductId);
-        System.out.println(processedProduct);
         sortedCollection.add(processedProduct);
         hashMapCollection.put(processedProduct.getId(), processedProduct);
 
