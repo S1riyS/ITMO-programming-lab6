@@ -1,5 +1,7 @@
 package s1riys.lab6.client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import s1riys.lab6.client.console.StandardConsole;
 import s1riys.lab6.client.managers.RuntimeManager;
 import s1riys.lab6.client.network.UDPClient;
@@ -11,8 +13,9 @@ import java.net.UnknownHostException;
 import static s1riys.lab6.common.constants.Network.PORT;
 
 public class Main {
+    public static Logger logger = LogManager.getLogger("ServerLogger");
+
     public static void main(String[] args) {
-        System.out.println("Hello client!");
         var console = new StandardConsole();
 
         try {
@@ -22,9 +25,10 @@ public class Main {
             cli.interactiveMode();
         } catch (UnknownHostException e) {
             System.out.println("Неизвестный хост");
+            logger.error("Неизвестный хост", e);
         } catch (IOException e) {
-//            logger.info("Невозможно подключиться к серверу.", e);
             System.out.println("Невозможно подключиться к серверу!");
+            logger.error("Невозможно подключиться к серверу!", e);
         }
     }
 }

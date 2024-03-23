@@ -1,5 +1,8 @@
 package s1riys.lab6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import s1riys.lab6.common.managers.CommandManager;
 import s1riys.lab6.common.constants.Commands;
 import s1riys.lab6.server.commands.*;
@@ -15,6 +18,8 @@ import java.net.UnknownHostException;
 import static s1riys.lab6.common.constants.Network.PORT;
 
 public class Main {
+    public static Logger logger = LogManager.getLogger("ServerLogger");
+
     public static void main(String[] args) {
         if (args.length == 0) {
             System.out.println("Введите имя загружаемого файла как аргумент командной строки");
@@ -39,12 +44,12 @@ public class Main {
             register(Commands.REMOVE_GREATER_KEY, new RemoveGreaterKey(collectionManager));
             register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(collectionManager));
             register(Commands.FILTER_BY_MANUFACTURER, new FilterByManufacturer(collectionManager));
+            register(Commands.PRINT_DESCENDING, new PrintDescending(collectionManager));
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 
         try {
             UDPServer server = new UDPServer(InetAddress.getLocalHost(), PORT, commandHandler);
-            System.out.println("Starting server...");
             server.run();
         } catch (SocketException e) {
             System.out.println("Ошибка сокета");

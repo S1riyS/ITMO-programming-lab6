@@ -11,10 +11,13 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":apps:common"))
     implementation("com.google.guava:guava:32.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.14.0")
-    implementation(project(":apps:common"))
     implementation("au.com.bytecode:opencsv:2.4")
+    implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 }
 
 java {
@@ -25,6 +28,10 @@ java {
 
 application {
     mainClass.set(MAIN_CLASS)
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
 }
 
 tasks.named<JavaExec>("run") {

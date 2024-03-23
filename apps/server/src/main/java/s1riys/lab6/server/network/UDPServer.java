@@ -6,10 +6,12 @@ import org.apache.commons.lang3.SerializationException;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Logger;
 import s1riys.lab6.common.network.UDPShared;
 import s1riys.lab6.common.network.requests.Request;
 import s1riys.lab6.common.network.responses.NoSuchCommandResponse;
 import s1riys.lab6.common.network.responses.Response;
+import s1riys.lab6.server.Main;
 import s1riys.lab6.server.handlers.CommandHandler;
 
 import java.io.IOException;
@@ -24,6 +26,7 @@ public class UDPServer extends UDPShared {
     private final DatagramSocket datagramSocket;
     private final CommandHandler commandHandler;
     private boolean running = true;
+    private final Logger logger = Main.logger;
 
     public UDPServer(InetAddress address, int port, CommandHandler commandHandler) throws SocketException {
         super(address, port);
@@ -44,13 +47,11 @@ public class UDPServer extends UDPShared {
             datagramSocket.receive(dp);
 
             addr = dp.getSocketAddress();
-//            logger.info("Получено \"" + new String(data) + "\" от " + dp.getAddress());
-            System.out.println("Получено \"" + new String(data) + "\" от " + dp.getAddress());
-//            logger.info("Последний байт: " + data[data.length - 1]);
+            logger.info("Получено \"{}\" от {}", new String(data), dp.getAddress());
 
             if (data[data.length - 1] == STOP_BYTE) {
                 received = true;
-//                logger.info("Получение данных от " + dp.getAddress() + " окончено");
+                logger.info("Получение данных от {} завершено", dp.getAddress());
             }
             result = Bytes.concat(result, Arrays.copyOf(data, data.length - 1));
         }
@@ -59,24 +60,22 @@ public class UDPServer extends UDPShared {
 
     public void sendData(byte[] data, SocketAddress addr) throws IOException {
         byte[][] dataChuncks = this.generateDataChuncks(data);
-//        logger.info("Отправляется " + dataChuncks.length + " чанков...");
-        System.out.println("Отправляется " + dataChuncks.length + " чанков...");
 
+        logger.info("Отправление чанков... ({} шт.)", dataChuncks.length);
         for (int i = 0; i < dataChuncks.length; i++) {
             var chunk = dataChuncks[i];
             if (i == dataChuncks.length - 1) {
                 var lastChunk = Bytes.concat(chunk, new byte[]{1});
                 var dp = new DatagramPacket(lastChunk, PACKET_SIZE, addr);
                 datagramSocket.send(dp);
-//                logger.info("Последний чанк размером " + chunk.length + " отправлен на сервер.");
+                logger.info("Последний чанк отправлен на сервер");
             } else {
                 var dp = new DatagramPacket(ByteBuffer.allocate(PACKET_SIZE).put(chunk).array(), PACKET_SIZE, addr);
                 datagramSocket.send(dp);
-//                logger.info("Чанк размером " + chunk.length + " отправлен на сервер.");
             }
         }
 
-//        logger.info("Отправка данных завершена");
+        logger.info("Отправка данных завершена");
     }
 
     public void connectToClient(SocketAddress addr) throws SocketException {
@@ -92,16 +91,14 @@ public class UDPServer extends UDPShared {
     }
 
     public void run() {
-//        logger.info("Сервер запущен по адресу" + addr);
-        System.out.println("Сервер запущен по адресу" + getAddr());
+        logger.info("Сервер запущен по адресу {}", getAddr());
 
         while (running) {
             Pair<Byte[], SocketAddress> dataPair;
             try {
                 dataPair = receiveData();
             } catch (Exception e) {
-//                logger.error("Ошибка получения данных : " + e.toString(), e);
-                System.out.println("Ошибка получения данных : " + e.toString());
+                logger.error("Ошибка получения данных : {}", e.toString(), e);
                 disconnectFromClient();
                 continue;
             }
@@ -111,21 +108,17 @@ public class UDPServer extends UDPShared {
 
             try {
                 connectToClient(clientAddr);
-//                logger.info("Соединено с " + clientAddr);
-                System.out.println("Соединено с " + clientAddr);
+                logger.info("Соединено с " + clientAddr);
             } catch (Exception e) {
-//                logger.error("Ошибка соединения с клиентом : " + e.toString(), e);
-                System.out.println("Ошибка соединения с клиентом : " + e.toString());
+                logger.error("Ошибка соединения с клиентом: {}", e.toString(), e);
             }
 
             Request request;
             try {
                 request = SerializationUtils.deserialize(ArrayUtils.toPrimitive(dataFromClient));
-//                logger.info("Обработка " + request + " из " + clientAddr);
-                System.out.println("Обработка " + request + " из " + clientAddr);
+                logger.info("Обработка {} от {}", request, clientAddr);
             } catch (SerializationException e) {
-//                logger.error("Невозможно десериализовать объект запроса.", e);
-                System.out.println("Невозможно десериализовать объект запроса.");
+                logger.error("Невозможно десериализовать объект запроса", e);
                 disconnectFromClient();
                 continue;
             }
@@ -134,25 +127,22 @@ public class UDPServer extends UDPShared {
             try {
                 response = commandHandler.handle(request);
             } catch (Exception e) {
-//                logger.error("Ошибка выполнения команды : " + e.toString(), e);
-                System.out.println("Ошибка выполнения команды : " + e.toString());
+                logger.error("Ошибка выполнения команды: {}", e.toString(), e);
             }
             if (response == null) response = new NoSuchCommandResponse(request.getName());
 
             var data = SerializationUtils.serialize(response);
-//            logger.info("Ответ: " + response);
+            logger.info("Ответ: {}", response);
 
             try {
                 sendData(data, clientAddr);
-//                logger.info("Отправлен ответ клиенту " + clientAddr);
-                System.out.println("Отправлен ответ клиенту " + clientAddr);
+                logger.info("Отправлен ответ клиенту по адресу {}", clientAddr);
             } catch (Exception e) {
-//                logger.error("Ошибка ввода-вывода : " + e.toString(), e);
-                System.out.println("Ошибка ввода-вывода : " + e.toString());
+                logger.error("Ошибка ввода-вывода: {}", e.toString(), e);
             }
 
             disconnectFromClient();
-//            logger.info("Отключение от клиента " + clientAddr);
+            logger.info("Отключение от клиента {}", clientAddr);
         }
 
         close();
