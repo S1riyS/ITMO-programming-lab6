@@ -35,6 +35,7 @@ public class Main {
             register(Commands.CLEAR, new Clear(collectionManager));
             register(Commands.SAVE, new Save(collectionManager));
             register(Commands.REMOVE_GREATER, new RemoveGreater(collectionManager));
+            register(Commands.REMOVE_LOWER, new RemoveLower(collectionManager));
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 

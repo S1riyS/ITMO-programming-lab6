@@ -42,6 +42,7 @@ public class RuntimeManager {
             register(Commands.EXECUTE_SCRIPT, new ExecuteScript(console));
             register(Commands.EXIT, new Exit(console));
             register(Commands.REMOVE_GREATER, new RemoveGreater(console, client));
+            register(Commands.REMOVE_LOWER, new RemoveLower(console, client));
         }};
     }
 
