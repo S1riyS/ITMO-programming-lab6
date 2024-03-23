@@ -37,6 +37,7 @@ public class Main {
             register(Commands.REMOVE_GREATER, new RemoveGreater(collectionManager));
             register(Commands.REMOVE_LOWER, new RemoveLower(collectionManager));
             register(Commands.REMOVE_GREATER_KEY, new RemoveGreaterKey(collectionManager));
+            register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(collectionManager));
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 
