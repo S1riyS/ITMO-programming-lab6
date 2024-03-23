@@ -8,8 +8,8 @@ public abstract class Command implements Executable<String[], Boolean> {
     private final String description;
     protected final IConsole console;
 
-    public Command(String name, String description, IConsole console) {
-        this.signature = name;
+    public Command(String signature, String description, IConsole console) {
+        this.signature = signature;
         this.description = description;
         this.console = console;
     }
