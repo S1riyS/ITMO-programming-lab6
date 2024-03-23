@@ -231,11 +231,11 @@ public class Product extends ModelWithId implements Comparable<Product>, Validat
      */
     @Override
     public int compareTo(Product o) {
-        return creationDate.compareTo(o.creationDate);
+//        return creationDate.compareTo(o.creationDate);
 
-//        int priceComparison = Long.compare(this.price, o.price);
-//        if (priceComparison != 0) return priceComparison;
-//        else return -Long.compare(this.id, o.id);
+        int priceComparison = Long.compare(this.price, o.price);
+        if (priceComparison != 0) return priceComparison;
+        else return -Long.compare(this.id, o.id);
     }
 
 
