@@ -38,7 +38,6 @@ public class Main {
             register(Commands.UPDATE, new Update(collectionManager));
             register(Commands.REMOVE_KEY, new RemoveKey(collectionManager));
             register(Commands.CLEAR, new Clear(collectionManager));
-            register(Commands.SAVE, new Save(collectionManager));
             register(Commands.REMOVE_GREATER, new RemoveGreater(collectionManager));
             register(Commands.REMOVE_LOWER, new RemoveLower(collectionManager));
             register(Commands.REMOVE_GREATER_KEY, new RemoveGreaterKey(collectionManager));

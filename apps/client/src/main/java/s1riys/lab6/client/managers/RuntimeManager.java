@@ -38,7 +38,6 @@ public class RuntimeManager {
             register(Commands.UPDATE, new Update(console, client));
             register(Commands.REMOVE_KEY, new RemoveKey(console, client));
             register(Commands.CLEAR, new Clear(console, client));
-            register(Commands.SAVE, new Save(console, client));
             register(Commands.EXECUTE_SCRIPT, new ExecuteScript(console));
             register(Commands.EXIT, new Exit(console));
             register(Commands.REMOVE_GREATER, new RemoveGreater(console, client));
