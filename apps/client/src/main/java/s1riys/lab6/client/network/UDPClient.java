@@ -65,7 +65,7 @@ public class UDPClient extends UDPShared {
             var data = receiveDataChunk(PACKET_SIZE);
             logger.info("Получено \"{}\"", new String(data));
 
-            if (data[data.length - 1] == 1) {
+            if (data[data.length - 1] == STOP_BYTE) {
                 received = true;
                 logger.info("Получение данных завершено");
             }

@@ -19,14 +19,13 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import static s1riys.lab6.common.constants.Network.PACKET_SIZE;
-import static s1riys.lab6.common.constants.Network.STOP_BYTE;
+import static s1riys.lab6.common.constants.Network.*;
 
 public class UDPServer extends UDPShared {
     private final DatagramSocket datagramSocket;
     private final CommandHandler commandHandler;
     private boolean running = true;
-    private Runnable afterExecutionHook;
+    private final Runnable afterExecutionHook;
     private final Logger logger = Main.logger;
 
     public UDPServer(InetAddress address, int port, CommandHandler commandHandler, Runnable afterExecutionHook) throws SocketException {
@@ -67,7 +66,7 @@ public class UDPServer extends UDPShared {
         for (int i = 0; i < dataChuncks.length; i++) {
             var chunk = dataChuncks[i];
             if (i == dataChuncks.length - 1) {
-                var lastChunk = Bytes.concat(chunk, new byte[]{1});
+                var lastChunk = Bytes.concat(chunk, new byte[]{STOP_BYTE});
                 var dp = new DatagramPacket(lastChunk, PACKET_SIZE, addr);
                 datagramSocket.send(dp);
                 logger.info("Последний чанк отправлен на сервер");
