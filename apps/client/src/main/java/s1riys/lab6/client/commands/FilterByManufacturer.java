@@ -34,7 +34,8 @@ public class FilterByManufacturer extends ServersideCommand {
             FilterByManufacturerResponse response = (FilterByManufacturerResponse) client.sendAndReceiveCommand(request);
             ValidationHelper.validateResponse(response);
 
-            response.products.forEach(console::println);
+            if (response.products.isEmpty()) console.println("Продукты не найдены");
+            else response.products.forEach(console::println);
             return true;
 
         } catch (InvalidFormException e) {
