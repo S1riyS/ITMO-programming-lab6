@@ -17,7 +17,7 @@ public class Clear extends RepositoryCommand {
             collectionManager.clear();
             return new ClearResponse(null);
         } catch (Exception e) {
-            return new ClearResponse("Не удалось очистить коллекцию");
+            return new ClearResponse("РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‡РёСЃС‚РёС‚СЊ РєРѕР»Р»РµРєС†РёСЋ");
         }
     }
 }
