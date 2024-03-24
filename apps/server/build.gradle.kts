@@ -1,13 +1,12 @@
-val MAIN_CLASS = "ru.lavrent.lab6.server.Main"
+val MAIN_CLASS = "s1riys.lab6.server.Main"
 
 plugins {
     application
-    id("com.github.johnrengelman.shadow") version "8.1.1"
     java
 }
 
 repositories {
-    gradlePluginPortal()
+    mavenCentral()
 }
 
 dependencies {
@@ -38,14 +37,10 @@ tasks.named<JavaExec>("run") {
     standardInput = System.`in`
 }
 
-tasks.shadowJar {
-    archiveBaseName.set("lab6Server")
-    archiveClassifier.set("")
-    minimize()
-}
 
 tasks.jar {
-    enabled = false
     manifest.attributes["Main-Class"] = MAIN_CLASS
-    dependsOn("shadowJar")
+    val dependencies = configurations.runtimeClasspath.get().map(::zipTree) // OR .map { zipTree(it) }
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

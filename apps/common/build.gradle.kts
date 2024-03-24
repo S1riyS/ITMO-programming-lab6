@@ -5,7 +5,7 @@ plugins {
 group = "s1riys.lab6"
 
 repositories {
-    gradlePluginPortal()
+    mavenCentral()
 }
 
 dependencies {
