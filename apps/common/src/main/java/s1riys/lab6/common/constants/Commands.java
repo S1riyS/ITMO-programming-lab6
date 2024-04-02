@@ -17,4 +17,5 @@ public interface Commands {
     String MAX_BY_CREATION_DATE = "max_by_creation_date";
     String FILTER_BY_MANUFACTURER = "filter_by_manufacturer";
     String PRINT_DESCENDING = "print_descending";
+    String ADVANCED_AGGREGATION = "advanced_aggregation";
 }

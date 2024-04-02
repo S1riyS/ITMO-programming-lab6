@@ -46,6 +46,7 @@ public class RuntimeManager {
             register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(console, client));
             register(Commands.FILTER_BY_MANUFACTURER, new FilterByManufacturer(console, client));
             register(Commands.PRINT_DESCENDING, new PrintDescending(console, client));
+            register(Commands.ADVANCED_AGGREGATION, new AdvancedAggregation(console, client));
         }};
     }
 

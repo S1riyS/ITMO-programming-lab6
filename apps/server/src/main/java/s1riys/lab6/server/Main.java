@@ -44,6 +44,7 @@ public class Main {
             register(Commands.MAX_BY_CREATION_DATE, new MaxByCreationDate(collectionManager));
             register(Commands.FILTER_BY_MANUFACTURER, new FilterByManufacturer(collectionManager));
             register(Commands.PRINT_DESCENDING, new PrintDescending(collectionManager));
+            register(Commands.ADVANCED_AGGREGATION, new AdvancedAggregation(collectionManager));
         }};
         CommandHandler commandHandler = new CommandHandler(serverCommandManager);
 

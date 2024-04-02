@@ -69,10 +69,11 @@ public class UDPServer extends UDPShared {
                 var lastChunk = Bytes.concat(chunk, new byte[]{STOP_BYTE});
                 var dp = new DatagramPacket(lastChunk, PACKET_SIZE, addr);
                 datagramSocket.send(dp);
-                logger.info("Последний чанк отправлен на сервер");
+                logger.info("Последний чанк размером " + lastChunk.length + " отправлен на сервер.");
             } else {
                 var dp = new DatagramPacket(ByteBuffer.allocate(PACKET_SIZE).put(chunk).array(), PACKET_SIZE, addr);
                 datagramSocket.send(dp);
+                logger.info("Чанк размером " + chunk.length + " отправлен на сервер.");
             }
         }
 
